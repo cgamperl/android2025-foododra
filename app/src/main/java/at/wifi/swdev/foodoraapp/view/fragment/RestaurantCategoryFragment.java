@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import at.wifi.swdev.foodoraapp.databinding.FragmentRestaurantCategoryBinding;
@@ -47,6 +48,8 @@ public class RestaurantCategoryFragment extends Fragment {
         // 1. Adapter für RecyclerView erstellen
         RestaurantCategoryAdapter adapter = new RestaurantCategoryAdapter();
         // 2. RecyclerView erstellen / einrichten
+        DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        binding.categoryList.addItemDecoration(decoration);
         // 2.1 RecyclerView mit Adapter verbinden
         binding.categoryList.setAdapter(adapter);
         // 2.2 LayoutManager setzen
