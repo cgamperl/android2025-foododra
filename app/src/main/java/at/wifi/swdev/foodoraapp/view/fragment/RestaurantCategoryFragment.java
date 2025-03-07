@@ -58,8 +58,13 @@ public class RestaurantCategoryFragment extends Fragment {
         viewModel.getRestaurantCategories().observe(getViewLifecycleOwner(), restaurantCategories -> {
             // 4. Adapter mit Daten aktualisieren
             adapter.setCategories(restaurantCategories);
+            binding.swipeToRefresh.setRefreshing(false);
         });
 
 
+        binding.swipeToRefresh.setOnRefreshListener(() -> {
+            // Daten neu laden
+            viewModel.getRestaurantCategories();
+        });
     }
 }
