@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import at.wifi.swdev.foodoraapp.api.ApiClient;
 import at.wifi.swdev.foodoraapp.api.FoodoraApiService;
@@ -29,7 +31,7 @@ public class RestaurantCategoryRepository {
                 // Es kann aber auch einen Fehler gegeben haben (HTTP 404 oder HTTP 500)
                 if (response.isSuccessful()) {
                     // Ergebnis mit LiveData zur Verfügung stellen
-                    restaurantCategories.postValue(response.body());
+                    restaurantCategories.postValue(toSortedList(response.body()));
                 }
             }
 
@@ -41,6 +43,12 @@ public class RestaurantCategoryRepository {
         });
 
         return restaurantCategories;
+    }
+
+    private List<RestaurantCategory> toSortedList(List<RestaurantCategory> list) {
+        return list.stream()
+                .sorted(Comparator.comparing(category -> category.name))
+                .collect(Collectors.toList());
     }
 
 }
