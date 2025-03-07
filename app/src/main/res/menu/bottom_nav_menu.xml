@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navCategories"
+        android:icon="@drawable/icon_category"
+        android:title="Kategorien" />
+
+    <item
+        android:id="@+id/navRestaurants"
+        android:icon="@drawable/icon_restaurant"
+        android:title="Restaurants" />
+
+    <item
+        android:id="@+id/navMeals"
+        android:icon="@drawable/icon_fastfood"
+        android:title="Gerichte" />
+
+    <item
+        android:id="@+id/navFiles"
+        android:icon="@drawable/icon_files"
+        android:title="Dateien" />
+</menu>
