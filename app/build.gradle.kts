@@ -6,6 +6,8 @@ android {
     namespace = "at.wifi.swdev.foodoraapp"
     compileSdk = 35
 
+    buildFeatures.viewBinding = true
+
     defaultConfig {
         applicationId = "at.wifi.swdev.foodoraapp"
         minSdk = 29
