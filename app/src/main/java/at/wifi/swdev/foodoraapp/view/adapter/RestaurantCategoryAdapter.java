@@ -12,14 +12,20 @@ import java.util.List;
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.RestaurantCategoryListItemBinding;
 import at.wifi.swdev.foodoraapp.view.listener.OnListItemClickListener;
+import at.wifi.swdev.foodoraapp.view.listener.OnListItemLongClickListener;
 
 public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCategoryAdapter.RestaurantCategoryViewHolder> {
 
     private List<RestaurantCategory> categories = new ArrayList<>();
     private OnListItemClickListener<RestaurantCategory> onListItemClickListener;
+    private OnListItemLongClickListener<RestaurantCategory> onListItemLongClickListener;
 
     public void setOnListItemClickListener(OnListItemClickListener<RestaurantCategory> onListItemClickListener) {
         this.onListItemClickListener = onListItemClickListener;
+    }
+
+    public void setOnListItemLongClickListener(OnListItemLongClickListener<RestaurantCategory> onListItemLongClickListener) {
+        this.onListItemLongClickListener = onListItemLongClickListener;
     }
 
     public void setCategories(List<RestaurantCategory> categories) {
@@ -48,6 +54,14 @@ public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCa
             if (this.onListItemClickListener != null) {
                 this.onListItemClickListener.onListItemClick(category, position);
             }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (this.onListItemLongClickListener != null) {
+                this.onListItemLongClickListener.onListItemLongClick(category, position);
+            }
+
+            return true;
         });
     }
 

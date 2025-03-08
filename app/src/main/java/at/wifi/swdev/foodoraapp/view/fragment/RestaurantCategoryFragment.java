@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+
 import at.wifi.swdev.foodoraapp.databinding.FragmentRestaurantCategoryBinding;
 import at.wifi.swdev.foodoraapp.view.adapter.RestaurantCategoryAdapter;
 import at.wifi.swdev.foodoraapp.view.viewmodel.RestaurantCategoryViewModel;
@@ -53,6 +56,26 @@ public class RestaurantCategoryFragment extends Fragment {
             RestaurantCategoryBottomSheet bottomSheet = new RestaurantCategoryBottomSheet(category);
             bottomSheet.show(getChildFragmentManager(), "RestaurantCategoryBottomSheet");
         });
+
+        adapter.setOnListItemLongClickListener(((category, position) -> {
+            // Wenn lange auf ein Listen-Element geklickt wird, soll ein Dialog zum Löschen angezeigt werden
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Kategorie löschen?")
+                    .setMessage("Möchten Sie die Kategorie '" + category.name + "' wirklich löschen?")
+                    .setPositiveButton("Löschen", (dialogInterface, i) -> {
+                        // Kategorie löschen
+                        viewModel.deleteRestaurantCategory(category).observe(requireActivity(), success -> {
+                            if (success) {
+                                Snackbar.make(binding.getRoot(), "Kategorie erfolgreich gelöscht", Snackbar.LENGTH_SHORT).show();
+                            } else {
+
+                            }
+                        });
+                    })
+                    .setNegativeButton("Abbrechen", null)
+                    .show();
+        }));
 
         // 2. RecyclerView erstellen / einrichten
         DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);

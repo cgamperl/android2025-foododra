@@ -24,6 +24,7 @@ public class RestaurantCategoryRepository {
 
     private final MutableLiveData<Boolean> categoryCreated = new MutableLiveData<>();
     private final MutableLiveData<Boolean> categoryUpdated = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> categoryDeleted = new MutableLiveData<>();
 
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
 
@@ -118,6 +119,41 @@ public class RestaurantCategoryRepository {
 
         return categoryUpdated;
     }
+
+    public LiveData<Boolean> deleteRestaurantCategory(RestaurantCategory categoryToDelete) {
+
+        apiService.deleteRestaurantCategory(categoryToDelete.id).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Element aus Liste löschen und Liste aktualisieren
+
+                    List<RestaurantCategory> currentList = restaurantCategories.getValue();
+
+                    if (currentList != null) {
+                        // Filtere das gelöschte Element aus der Liste raus
+                        List<RestaurantCategory> updatedCategories = currentList.stream()
+                                .filter(c -> !c.id.equals(categoryToDelete.id))
+                                .collect(Collectors.toList());
+
+                        restaurantCategories.postValue(updatedCategories);
+                        categoryDeleted.postValue(true);
+                    }
+                } else {
+                    categoryDeleted.postValue(false);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                categoryDeleted.postValue(false);
+            }
+        });
+
+        return categoryDeleted;
+    }
+
 
     private List<RestaurantCategory> toSortedList(List<RestaurantCategory> list) {
         return list.stream()

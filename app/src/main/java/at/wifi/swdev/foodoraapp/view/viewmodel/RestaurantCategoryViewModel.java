@@ -33,4 +33,8 @@ public class RestaurantCategoryViewModel extends AndroidViewModel {
         return categoryRepository.updateRestaurantCategory(category);
     }
 
+    public LiveData<Boolean> deleteRestaurantCategory(RestaurantCategory category) {
+        return categoryRepository.deleteRestaurantCategory(category);
+    }
+
 }
