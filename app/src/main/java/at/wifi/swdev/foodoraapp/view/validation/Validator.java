@@ -11,9 +11,6 @@ public interface Validator extends TextWatcher {
     }
 
     @Override
-    void onTextChanged(CharSequence charSequence, int i, int i1, int i2);
-
-    @Override
     default void afterTextChanged(Editable editable) {
         // Egal
     }
