@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Speichern"
+        android:enabled="false"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />

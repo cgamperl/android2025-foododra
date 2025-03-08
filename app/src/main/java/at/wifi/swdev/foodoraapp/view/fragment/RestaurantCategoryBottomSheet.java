@@ -48,8 +48,10 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (binding.categoryNameET.getText().toString().isEmpty()) {
-            binding.saveCategoryBtn.setEnabled(false);
+        if (categoryToUpdate != null) {
+            // Wir bearbeiten eine Kategorie
+            binding.categoryNameET.setText(categoryToUpdate.name);
+            binding.saveCategoryBtn.setEnabled(true);
         }
 
         // Validierung einbauen
