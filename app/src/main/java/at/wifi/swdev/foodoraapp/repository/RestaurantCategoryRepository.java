@@ -157,7 +157,7 @@ public class RestaurantCategoryRepository {
 
     private List<RestaurantCategory> toSortedList(List<RestaurantCategory> list) {
         return list.stream()
-                .sorted(Comparator.comparing(category -> category.name))
+                .sorted(Comparator.comparing(category -> category.name.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
