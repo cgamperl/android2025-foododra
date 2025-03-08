@@ -66,5 +66,11 @@ public class RestaurantCategoryFragment extends Fragment {
             // Daten neu laden
             viewModel.getRestaurantCategories();
         });
+
+        binding.floatingActionButton.setOnClickListener(v -> {
+            RestaurantCategoryBottomSheet bottomSheet = new RestaurantCategoryBottomSheet();
+            bottomSheet.show(getChildFragmentManager(), "RestaurantCategoryBottomSheet");
+        });
+
     }
 }
