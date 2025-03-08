@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.BottomsheetRestaurantCategoryBinding;
+import at.wifi.swdev.foodoraapp.view.validation.Validator;
 import at.wifi.swdev.foodoraapp.view.viewmodel.RestaurantCategoryViewModel;
 
 public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
@@ -39,9 +40,32 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (binding.categoryNameET.getText().toString().isEmpty()) {
+            binding.saveCategoryBtn.setEnabled(false);
+        }
+
+        // Validierung einbauen
+        // Name darf nicht leer sein
+        binding.categoryNameET.addTextChangedListener((Validator) (charSequence, i, i1, i2) -> {
+            if (charSequence.toString().trim().isEmpty()) {
+                // Leere Eingabe
+                binding.textInputLayout.setError("Katgegorie-Name darf nicht leer sein");
+                binding.saveCategoryBtn.setEnabled(false);
+            } else {
+                binding.textInputLayout.setError(null);
+                binding.saveCategoryBtn.setEnabled(true);
+            }
+        });
+
         // Beide Möglichkeiten: Erstellen und Bearbeiten
 
         binding.saveCategoryBtn.setOnClickListener(v -> {
+
+            // Button deaktivieren (verhindert neuen Submit)
+            binding.saveCategoryBtn.setEnabled(false);
+            // Eventuelle Fehlermeldung ausblenden
+            binding.errorMessageTV.setVisibility(View.GONE);
+
             // Text auslesen
             String categoryName = binding.categoryNameET.getText().toString();
             // RestaurantCategory erstellen
@@ -53,6 +77,7 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
                     dismiss();
                 } else {
                     binding.errorMessageTV.setVisibility(View.VISIBLE);
+                    binding.saveCategoryBtn.setEnabled(true);
                 }
             });
         });
