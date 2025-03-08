@@ -47,6 +47,13 @@ public class RestaurantCategoryFragment extends Fragment {
 
         // 1. Adapter für RecyclerView erstellen
         RestaurantCategoryAdapter adapter = new RestaurantCategoryAdapter();
+
+        adapter.setOnListItemClickListener((category, position) -> {
+            // Wenn auf eine Listen-Element geklickt wird, soll das BottomSheet angezeigt werden
+            RestaurantCategoryBottomSheet bottomSheet = new RestaurantCategoryBottomSheet(category);
+            bottomSheet.show(getChildFragmentManager(), "RestaurantCategoryBottomSheet");
+        });
+
         // 2. RecyclerView erstellen / einrichten
         DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         binding.categoryList.addItemDecoration(decoration);
