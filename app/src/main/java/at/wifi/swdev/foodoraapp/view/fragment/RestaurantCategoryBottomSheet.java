@@ -78,18 +78,44 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
 
             // Text auslesen
             String categoryName = binding.categoryNameET.getText().toString();
-            // RestaurantCategory erstellen
-            RestaurantCategory category = new RestaurantCategory(categoryName);
-            // Neue Kategorie speichern
-            viewModel.createRestaurantCategory(category).observe(requireActivity(), success -> {
-                if (success) {
-                    // Bottomsheet schließen
-                    dismiss();
-                } else {
-                    binding.errorMessageTV.setVisibility(View.VISIBLE);
-                    binding.saveCategoryBtn.setEnabled(true);
-                }
-            });
+
+            if (categoryToUpdate != null) {
+                // Kategorie aktualisieren
+                updateRestaurantCategory(categoryName);
+            } else {
+                // Neue Kategorie anlegen
+                createRestaurantCategory(categoryName);
+            }
         });
     }
+
+    private void createRestaurantCategory(String categoryName) {
+        // RestaurantCategory erstellen
+        RestaurantCategory category = new RestaurantCategory(categoryName);
+        // Neue Kategorie speichern
+        viewModel.createRestaurantCategory(category).observe(requireActivity(), success -> {
+            if (success) {
+                // Bottomsheet schließen
+                dismiss();
+            } else {
+                binding.errorMessageTV.setVisibility(View.VISIBLE);
+                binding.saveCategoryBtn.setEnabled(true);
+            }
+        });
+    }
+
+    private void updateRestaurantCategory(String categoryName) {
+        // Bestehendes Objekt aktualisieren
+        categoryToUpdate.name = categoryName;
+        viewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), success -> {
+            if (success) {
+                // Bottomsheet schließen
+                dismiss();
+            } else {
+                binding.errorMessageTV.setVisibility(View.VISIBLE);
+                binding.saveCategoryBtn.setEnabled(true);
+            }
+        });
+    }
+
 }

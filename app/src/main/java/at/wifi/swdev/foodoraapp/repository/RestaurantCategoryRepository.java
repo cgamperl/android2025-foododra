@@ -23,6 +23,7 @@ public class RestaurantCategoryRepository {
     private final MutableLiveData<List<RestaurantCategory>> restaurantCategories = new MutableLiveData<>(new ArrayList<>());
 
     private final MutableLiveData<Boolean> categoryCreated = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> categoryUpdated = new MutableLiveData<>();
 
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
 
@@ -74,6 +75,48 @@ public class RestaurantCategoryRepository {
         });
 
         return categoryCreated;
+    }
+
+    public LiveData<Boolean> updateRestaurantCategory(RestaurantCategory category) {
+        apiService.updateRestaurantCategory(category.id, category).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<RestaurantCategory> call, Response<RestaurantCategory> response) {
+                if (response.isSuccessful()) {
+                    // Element in der Liste aktualisieren
+                    RestaurantCategory updated = response.body();
+                    List<RestaurantCategory> updatedCategories = new ArrayList<>(restaurantCategories.getValue());
+
+                    int position = 0;
+                    for (RestaurantCategory restaurantCategory : updatedCategories) {
+                        if (updated != null && restaurantCategory.id.equals(updated.id)) {
+                            updatedCategories.set(position, updated);
+                        }
+                        position++;
+                    }
+                    restaurantCategories.postValue(toSortedList(updatedCategories));
+
+
+//                    for (int position = 0; position < updatedCategories.size(); position++) {
+//                        RestaurantCategory restaurantCategory = updatedCategories.get(position);
+//                        if (restaurantCategory.id.equals(updated.id)) {
+//                            updatedCategories.set(position, updated);
+//                        }
+//                    }
+
+                    // Erfolg zurückmelden
+                    categoryUpdated.postValue(true);
+                } else {
+                    categoryUpdated.postValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantCategory> call, Throwable throwable) {
+                categoryUpdated.postValue(false);
+            }
+        });
+
+        return categoryUpdated;
     }
 
     private List<RestaurantCategory> toSortedList(List<RestaurantCategory> list) {

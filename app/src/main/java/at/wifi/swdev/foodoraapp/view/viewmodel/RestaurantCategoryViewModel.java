@@ -29,4 +29,8 @@ public class RestaurantCategoryViewModel extends AndroidViewModel {
         return categoryRepository.createRestaurantCategory(category);
     }
 
+    public LiveData<Boolean> updateRestaurantCategory(RestaurantCategory category) {
+        return categoryRepository.updateRestaurantCategory(category);
+    }
+
 }
