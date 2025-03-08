@@ -59,7 +59,7 @@ public class RestaurantCategoryRepository {
                     if (currentCategories != null) {
                         List<RestaurantCategory> updatedCategories = new ArrayList<>(currentCategories);
                         updatedCategories.add(created);
-                        restaurantCategories.postValue(updatedCategories);
+                        restaurantCategories.postValue(toSortedList(updatedCategories));
                         categoryCreated.postValue(true);
                     }
                 } else {
