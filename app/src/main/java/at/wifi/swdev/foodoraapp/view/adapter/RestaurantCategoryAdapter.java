@@ -1,7 +1,6 @@
 package at.wifi.swdev.foodoraapp.view.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import at.wifi.swdev.foodoraapp.view.listener.OnListItemClickListener;
 
 public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCategoryAdapter.RestaurantCategoryViewHolder> {
 
-    private RestaurantCategoryListItemBinding binding;
     private List<RestaurantCategory> categories = new ArrayList<>();
     private OnListItemClickListener<RestaurantCategory> onListItemClickListener;
 
@@ -33,9 +31,9 @@ public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCa
     @Override
     public RestaurantCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        binding = RestaurantCategoryListItemBinding.inflate(inflater, parent, false);
+        RestaurantCategoryListItemBinding binding = RestaurantCategoryListItemBinding.inflate(inflater, parent, false);
 
-        return new RestaurantCategoryViewHolder(binding.getRoot());
+        return new RestaurantCategoryViewHolder(binding);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCa
         // Datensatz dem ViewHolder zuweisen
 
         RestaurantCategory category = categories.get(position);
-        binding.categoryName.setText(category.name);
+        holder.binding.categoryName.setText(category.name);
 
         // Rufe "unseren" Klickhandler auf, wenn auf ein Listen-Element geklickt wurde
         holder.itemView.setOnClickListener(v -> {
@@ -64,8 +62,11 @@ public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCa
 
     public class RestaurantCategoryViewHolder extends RecyclerView.ViewHolder {
 
-        public RestaurantCategoryViewHolder(@NonNull View itemView) {
-            super(itemView);
+        private final RestaurantCategoryListItemBinding binding;
+
+        public RestaurantCategoryViewHolder(@NonNull RestaurantCategoryListItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }
