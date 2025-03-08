@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/fileCreatedAtLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Erstellt am:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintStart_toStartOf="@+id/fileName"
+        app:layout_constraintTop_toBottomOf="@+id/fileName" />
+
+    <TextView
+        android:id="@+id/fileCreatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="03.03.2025 11:11"
+        app:layout_constraintBottom_toBottomOf="@+id/fileCreatedAtLabel"
+        app:layout_constraintStart_toEndOf="@+id/fileCreatedAtLabel"
+        app:layout_constraintTop_toTopOf="@+id/fileCreatedAtLabel" />
+
+    <TextView
+        android:id="@+id/fileSizeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="Dateigröße:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintStart_toStartOf="@+id/fileCreatedAtLabel"
+        app:layout_constraintTop_toBottomOf="@+id/fileCreatedAtLabel" />
+
+    <TextView
+        android:id="@+id/fileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123 KB"
+        app:layout_constraintBottom_toBottomOf="@+id/fileSizeLabel"
+        app:layout_constraintStart_toStartOf="@+id/fileCreatedAt"
+        app:layout_constraintTop_toBottomOf="@+id/fileCreatedAtLabel" />
+</androidx.constraintlayout.widget.ConstraintLayout>
