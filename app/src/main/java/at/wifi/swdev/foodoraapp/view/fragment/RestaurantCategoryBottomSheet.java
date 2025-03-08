@@ -93,29 +93,23 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
         // RestaurantCategory erstellen
         RestaurantCategory category = new RestaurantCategory(categoryName);
         // Neue Kategorie speichern
-        viewModel.createRestaurantCategory(category).observe(requireActivity(), success -> {
-            if (success) {
-                // Bottomsheet schließen
-                dismiss();
-            } else {
-                binding.errorMessageTV.setVisibility(View.VISIBLE);
-                binding.saveCategoryBtn.setEnabled(true);
-            }
-        });
+        viewModel.createRestaurantCategory(category).observe(requireActivity(), this::handleResult);
     }
 
     private void updateRestaurantCategory(String categoryName) {
         // Bestehendes Objekt aktualisieren
         categoryToUpdate.name = categoryName;
-        viewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), success -> {
-            if (success) {
-                // Bottomsheet schließen
-                dismiss();
-            } else {
-                binding.errorMessageTV.setVisibility(View.VISIBLE);
-                binding.saveCategoryBtn.setEnabled(true);
-            }
-        });
+        viewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), this::handleResult);
+    }
+
+    private void handleResult(Boolean success) {
+        if (success) {
+            // Bottomsheet schließen
+            dismiss();
+        } else {
+            binding.errorMessageTV.setVisibility(View.VISIBLE);
+            binding.saveCategoryBtn.setEnabled(true);
+        }
     }
 
 }
