@@ -12,11 +12,17 @@ import java.util.List;
 
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.RestaurantCategoryListItemBinding;
+import at.wifi.swdev.foodoraapp.view.listener.OnListItemClickListener;
 
 public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCategoryAdapter.RestaurantCategoryViewHolder> {
 
     private RestaurantCategoryListItemBinding binding;
     private List<RestaurantCategory> categories = new ArrayList<>();
+    private OnListItemClickListener<RestaurantCategory> onListItemClickListener;
+
+    public void setOnListItemClickListener(OnListItemClickListener<RestaurantCategory> onListItemClickListener) {
+        this.onListItemClickListener = onListItemClickListener;
+    }
 
     public void setCategories(List<RestaurantCategory> categories) {
         this.categories = categories;
@@ -39,7 +45,12 @@ public class RestaurantCategoryAdapter extends RecyclerView.Adapter<RestaurantCa
         RestaurantCategory category = categories.get(position);
         binding.categoryName.setText(category.name);
 
-        // TODO: Klick auf Listenelement implementieren
+        // Rufe "unseren" Klickhandler auf, wenn auf ein Listen-Element geklickt wurde
+        holder.itemView.setOnClickListener(v -> {
+            if (this.onListItemClickListener != null) {
+                this.onListItemClickListener.onListItemClick(category, position);
+            }
+        });
     }
 
     @Override
