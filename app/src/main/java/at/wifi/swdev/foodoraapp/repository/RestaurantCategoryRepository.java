@@ -27,7 +27,7 @@ public class RestaurantCategoryRepository {
 
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
 
-        apiService.getRestaurantCategories().enqueue(new Callback<List<RestaurantCategory>>() {
+        apiService.getRestaurantCategories().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<List<RestaurantCategory>> call, @NonNull Response<List<RestaurantCategory>> response) {
                 // Wir haben eine Antwort vom Server erhalten...
@@ -49,7 +49,7 @@ public class RestaurantCategoryRepository {
     }
 
     public LiveData<Boolean> createRestaurantCategory(RestaurantCategory category) {
-        apiService.createRestaurantCategory(category).enqueue(new Callback<RestaurantCategory>() {
+        apiService.createRestaurantCategory(category).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RestaurantCategory> call, Response<RestaurantCategory> response) {
                 if (response.isSuccessful()) {
