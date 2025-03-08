@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void setupBottomNavigation() {
         binding.bottomNav.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+        // Welcher Eintrag wird vorausgewählt
         binding.bottomNav.setSelectedItemId(R.id.navCategories);
     }
 
