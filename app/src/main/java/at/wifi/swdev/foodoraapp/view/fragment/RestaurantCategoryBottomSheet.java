@@ -20,6 +20,14 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
 
     private BottomsheetRestaurantCategoryBinding binding;
     private RestaurantCategoryViewModel viewModel;
+    private RestaurantCategory categoryToUpdate;
+
+    public RestaurantCategoryBottomSheet() {
+    }
+
+    public RestaurantCategoryBottomSheet(RestaurantCategory categoryToUpdate) {
+        this.categoryToUpdate = categoryToUpdate;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
