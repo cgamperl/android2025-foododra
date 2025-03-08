@@ -24,4 +24,9 @@ public class RestaurantCategoryViewModel extends AndroidViewModel {
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
         return categoryRepository.getRestaurantCategories();
     }
+
+    public LiveData<Boolean> createRestaurantCategory(RestaurantCategory category) {
+        return categoryRepository.createRestaurantCategory(category);
+    }
+
 }

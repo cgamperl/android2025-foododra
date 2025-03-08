@@ -22,6 +22,8 @@ public class RestaurantCategoryRepository {
     private final FoodoraApiService apiService = ApiClient.getApiService();
     private final MutableLiveData<List<RestaurantCategory>> restaurantCategories = new MutableLiveData<>(new ArrayList<>());
 
+    private final MutableLiveData<Boolean> categoryCreated = new MutableLiveData<>();
+
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
 
         apiService.getRestaurantCategories().enqueue(new Callback<List<RestaurantCategory>>() {
@@ -43,6 +45,35 @@ public class RestaurantCategoryRepository {
         });
 
         return restaurantCategories;
+    }
+
+    public LiveData<Boolean> createRestaurantCategory(RestaurantCategory category) {
+        apiService.createRestaurantCategory(category).enqueue(new Callback<RestaurantCategory>() {
+            @Override
+            public void onResponse(Call<RestaurantCategory> call, Response<RestaurantCategory> response) {
+                if (response.isSuccessful()) {
+                    RestaurantCategory created = response.body();
+                    List<RestaurantCategory> currentCategories = restaurantCategories.getValue();
+
+                    if (currentCategories != null) {
+                        List<RestaurantCategory> updatedCategories = new ArrayList<>(currentCategories);
+                        updatedCategories.add(created);
+                        restaurantCategories.postValue(updatedCategories);
+                        categoryCreated.postValue(true);
+                    }
+                } else {
+                    // TODO: Handle error
+                    categoryCreated.postValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantCategory> call, Throwable throwable) {
+                categoryCreated.postValue(false);
+            }
+        });
+
+        return categoryCreated;
     }
 
     private List<RestaurantCategory> toSortedList(List<RestaurantCategory> list) {
