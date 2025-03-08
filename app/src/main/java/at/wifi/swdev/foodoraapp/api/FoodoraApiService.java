@@ -27,12 +27,12 @@ public interface FoodoraApiService {
     @POST("categories/")
     Call<RestaurantCategory> createRestaurantCategory(@Body RestaurantCategory category);
 
-    @GET("categories/{id}/")
+    @GET("categories/{id}")
     Call<RestaurantCategory> getRestaurantCategory(@Path("id") String restaurantCategoryId);
 
-    @PUT("categories/{id}/")
+    @PUT("categories/{id}")
     Call<RestaurantCategory> updateRestaurantCategory(@Path("id") String restaurantCategoryId, @Body RestaurantCategory category);
 
-    @DELETE("categories/{id}/")
+    @DELETE("categories/{id}")
     Call<Void> deleteRestaurantCategory(@Path("id") String restaurantCategoryId);
 }
