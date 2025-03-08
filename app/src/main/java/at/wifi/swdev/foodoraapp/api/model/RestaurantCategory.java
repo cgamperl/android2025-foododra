@@ -11,6 +11,5 @@ public class RestaurantCategory {
 
     public String id;
     public String name;
-
-    // TODO: file später dazu
+    public FileData file;
 }
