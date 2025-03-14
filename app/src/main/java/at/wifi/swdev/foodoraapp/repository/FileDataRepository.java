@@ -1,5 +1,7 @@
 package at.wifi.swdev.foodoraapp.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -55,12 +57,14 @@ public class FileDataRepository {
                     createdFile.postValue(response.body());
                 } else {
                     // Handle error
+                    Log.e("", "Error creating file");
                 }
             }
 
             @Override
             public void onFailure(Call<FileData> call, Throwable throwable) {
                 // Handle error
+                Log.e("", "Error creating file");
             }
         });
 

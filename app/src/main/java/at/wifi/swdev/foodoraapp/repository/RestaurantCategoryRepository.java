@@ -1,5 +1,7 @@
 package at.wifi.swdev.foodoraapp.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -36,6 +38,9 @@ public class RestaurantCategoryRepository {
                 if (response.isSuccessful()) {
                     // Ergebnis mit LiveData zur Verfügung stellen
                     restaurantCategories.postValue(toSortedList(response.body()));
+                } else {
+                    // Server hat Fehler-Code geschickt
+                    Log.d("", "FAILURE");
                 }
             }
 
@@ -43,6 +48,7 @@ public class RestaurantCategoryRepository {
             public void onFailure(@NonNull Call<List<RestaurantCategory>> call, @NonNull Throwable throwable) {
                 // Es kam zu einer Exception (Kein Internet, ...)
                 // TODO: Fehlerbehandlung
+                Log.d("", "FAILURE");
             }
         });
 
