@@ -1,7 +1,10 @@
 package at.wifi.swdev.foodoraapp.view.fragment;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +44,11 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
         @Override
         public void onActivityResult(Uri uri) {
             if (uri != null) {
+                // Originalen Dateinamen auslesen
+                String fileName = getFileName(requireContext(), uri);
+
                 // In unserer App eine temporäre Datei erzeugen
-                pickedFile = new File(requireContext().getCacheDir(), "image.png");
+                pickedFile = new File(requireContext().getCacheDir(), fileName);
                 mimeType = requireContext().getContentResolver().getType(uri);
 
                 try {
@@ -67,6 +73,33 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
             }
         }
     });
+
+    private String getFileName(Context context, Uri uri) {
+        String fileName = null;
+
+        if ("content".equals(uri.getScheme())) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (index != -1) {
+                        fileName = cursor.getString(index);
+                    }
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
+        // Fallback
+        if (fileName == null) {
+            fileName = uri.getLastPathSegment();
+        }
+
+        return fileName;
+    }
 
     public RestaurantCategoryBottomSheet() {
     }
