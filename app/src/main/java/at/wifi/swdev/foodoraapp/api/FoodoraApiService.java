@@ -5,7 +5,7 @@ import java.util.List;
 import at.wifi.swdev.foodoraapp.api.model.FileData;
 import at.wifi.swdev.foodoraapp.api.model.Restaurant;
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
-import okhttp3.RequestBody;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -48,11 +48,11 @@ public interface FoodoraApiService {
 
     @Multipart
     @POST("files/{relId}")
-    Call<FileData> uploadFile(@Path("relId") String relId, @Part("file") RequestBody file);
+    Call<FileData> uploadFile(@Path("relId") String relId, @Part("file") MultipartBody.Part file);
 
     @Multipart
     @PUT("files/{id}")
-    Call<FileData> updateFile(@Path("id") String fileId, @Part("file") RequestBody file);
+    Call<FileData> updateFile(@Path("id") String fileId, @Part("file") MultipartBody.Part file);
 
     @DELETE("files/{relId}")
     Call<Void> deleteFileByRelId(@Path("relId") String relId);
