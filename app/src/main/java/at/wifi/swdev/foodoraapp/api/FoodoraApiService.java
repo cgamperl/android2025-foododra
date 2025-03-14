@@ -48,11 +48,11 @@ public interface FoodoraApiService {
 
     @Multipart
     @POST("files/{relId}")
-    Call<FileData> uploadFile(@Path("relId") String relId, @Part("file") MultipartBody.Part file);
+    Call<FileData> uploadFile(@Path("relId") String relId, @Part MultipartBody.Part file);
 
     @Multipart
     @PUT("files/{id}")
-    Call<FileData> updateFile(@Path("id") String fileId, @Part("file") MultipartBody.Part file);
+    Call<FileData> updateFile(@Path("id") String fileId, @Part MultipartBody.Part file);
 
     @DELETE("files/{relId}")
     Call<Void> deleteFileByRelId(@Path("relId") String relId);
