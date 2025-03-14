@@ -1,15 +1,21 @@
 package at.wifi.swdev.foodoraapp.view.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.io.File;
 
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.BottomsheetRestaurantCategoryBinding;
@@ -21,6 +27,17 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
     private BottomsheetRestaurantCategoryBinding binding;
     private RestaurantCategoryViewModel viewModel;
     private RestaurantCategory categoryToUpdate;
+
+    private File pickedFile;
+
+    private final ActivityResultLauncher<String> getContentLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri uri) {
+            if (uri != null) {
+                pickedFile = new File(uri.getPath());
+            }
+        }
+    });
 
     public RestaurantCategoryBottomSheet() {
     }
@@ -65,6 +82,11 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
                 binding.textInputLayout.setError(null);
                 binding.saveCategoryBtn.setEnabled(true);
             }
+        });
+
+        binding.pickFileBtn.setOnClickListener(v -> {
+            // Let user pick an image
+            getContentLauncher.launch("image/*");
         });
 
         // Beide Möglichkeiten: Erstellen und Bearbeiten
