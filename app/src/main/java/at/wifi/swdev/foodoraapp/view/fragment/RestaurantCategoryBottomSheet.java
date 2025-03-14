@@ -20,12 +20,14 @@ import java.io.File;
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.BottomsheetRestaurantCategoryBinding;
 import at.wifi.swdev.foodoraapp.view.validation.Validator;
+import at.wifi.swdev.foodoraapp.view.viewmodel.FileDataViewModel;
 import at.wifi.swdev.foodoraapp.view.viewmodel.RestaurantCategoryViewModel;
 
 public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
 
     private BottomsheetRestaurantCategoryBinding binding;
-    private RestaurantCategoryViewModel viewModel;
+    private RestaurantCategoryViewModel categoryViewModel;
+    private FileDataViewModel fileDataViewModel;
     private RestaurantCategory categoryToUpdate;
 
     private File pickedFile;
@@ -49,7 +51,9 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(RestaurantCategoryViewModel.class);
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity());
+        categoryViewModel = viewModelProvider.get(RestaurantCategoryViewModel.class);
+        fileDataViewModel = viewModelProvider.get(FileDataViewModel.class);
     }
 
     @Nullable
@@ -115,19 +119,28 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
         // RestaurantCategory erstellen
         RestaurantCategory category = new RestaurantCategory(categoryName);
         // Neue Kategorie speichern
-        viewModel.createRestaurantCategory(category).observe(requireActivity(), this::handleResult);
+        categoryViewModel.createRestaurantCategory(category).observe(requireActivity(), this::handleResult);
     }
 
     private void updateRestaurantCategory(String categoryName) {
         // Bestehendes Objekt aktualisieren
         categoryToUpdate.name = categoryName;
-        viewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), this::handleResult);
+        categoryViewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), this::handleResult);
     }
 
     private void handleResult(Boolean success) {
         if (success) {
-            // Bottomsheet schließen
-            dismiss();
+            // Gibt es eine Datei, die wir noch uploaded sollen?
+            if (pickedFile != null) {
+                // Wir laden die Datei hoch
+                fileDataViewModel.uploadFile("XXXXXXX", pickedFile).observe(requireActivity(), fileData -> {
+                    // TODO: We might want to patch this into the category
+                    dismiss();
+                });
+            } else {
+                // keine Datei -> Bottomsheet schließen
+                dismiss();
+            }
         } else {
             binding.errorMessageTV.setVisibility(View.VISIBLE);
             binding.saveCategoryBtn.setEnabled(true);
