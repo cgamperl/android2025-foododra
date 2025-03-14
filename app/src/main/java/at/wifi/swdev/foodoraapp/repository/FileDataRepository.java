@@ -20,6 +20,7 @@ import retrofit2.Response;
 public class FileDataRepository {
 
     private final MutableLiveData<List<FileData>> files = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<FileData> createdFile = new MutableLiveData<>();
     private final FoodoraApiService apiService = ApiClient.getApiService();
 
     public LiveData<List<FileData>> getAllFiles() {
@@ -51,7 +52,7 @@ public class FileDataRepository {
             @Override
             public void onResponse(Call<FileData> call, Response<FileData> response) {
                 if (response.isSuccessful()) {
-
+                    createdFile.postValue(response.body());
                 } else {
                     // Handle error
                 }
@@ -62,6 +63,8 @@ public class FileDataRepository {
                 // Handle error
             }
         });
+
+        return createdFile;
     }
 
 }

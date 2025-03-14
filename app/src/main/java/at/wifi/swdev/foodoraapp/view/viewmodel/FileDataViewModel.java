@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.io.File;
 import java.util.List;
 
 import at.wifi.swdev.foodoraapp.api.model.FileData;
@@ -21,6 +22,10 @@ public class FileDataViewModel extends AndroidViewModel {
 
     public LiveData<List<FileData>> getAllFiles() {
         return repository.getAllFiles();
+    }
+
+    public LiveData<FileData> uploadFile(String relId, File file) {
+        return repository.uploadFile(relId, file);
     }
 
 }
