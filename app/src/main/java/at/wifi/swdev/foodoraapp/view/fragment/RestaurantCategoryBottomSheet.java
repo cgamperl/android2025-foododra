@@ -2,6 +2,7 @@ package at.wifi.swdev.foodoraapp.view.fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.BottomsheetRestaurantCategoryBinding;
@@ -31,12 +35,35 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
     private RestaurantCategory categoryToUpdate;
 
     private File pickedFile;
+    private String mimeType;
 
     private final ActivityResultLauncher<String> getContentLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri uri) {
             if (uri != null) {
-                pickedFile = new File(uri.getPath());
+                // In unserer App eine temporäre Datei erzeugen
+                pickedFile = new File(requireContext().getCacheDir(), "image.png");
+                mimeType = requireContext().getContentResolver().getType(uri);
+
+                try {
+                    pickedFile.createNewFile();
+
+                    // Wir wollen den Content der ausgewählten Datei lesen bzw. kopieren
+                    // -> try with resources
+                    try (InputStream inputStream = requireContext().getContentResolver().openInputStream(uri)) {
+                        FileOutputStream outputStream = new FileOutputStream(pickedFile);
+
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, read);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    Log.e("", "Error creating temporary file");
+                    throw new RuntimeException(e);
+                }
             }
         }
     });
@@ -133,7 +160,7 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
             // Gibt es eine Datei, die wir noch uploaded sollen?
             if (pickedFile != null) {
                 // Wir laden die Datei hoch
-                fileDataViewModel.uploadFile("XXXXXXX", pickedFile).observe(requireActivity(), fileData -> {
+                fileDataViewModel.uploadFile("XXXXXXX", pickedFile, mimeType).observe(requireActivity(), fileData -> {
                     // TODO: We might want to patch this into the category
                     dismiss();
                 });

@@ -24,8 +24,8 @@ public class FileDataViewModel extends AndroidViewModel {
         return repository.getAllFiles();
     }
 
-    public LiveData<FileData> uploadFile(String relId, File file) {
-        return repository.uploadFile(relId, file);
+    public LiveData<FileData> uploadFile(String relId, File file, String mimeType) {
+        return repository.uploadFile(relId, file, mimeType);
     }
 
 }

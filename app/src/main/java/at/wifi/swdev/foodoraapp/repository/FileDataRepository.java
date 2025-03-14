@@ -44,10 +44,14 @@ public class FileDataRepository {
     }
 
 
-    public LiveData<FileData> uploadFile(String relId, File file) {
+    public LiveData<FileData> uploadFile(String relId, File file, String mimeType) {
+        // Use a fallback, if mime type was not recognized
+        if (mimeType == null) {
+            mimeType = "image/*";
+        }
+
         // File in Part umwandeln
-        // TODO: Check if we can use a more specific MIME type
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody requestBody = RequestBody.create(MediaType.parse(mimeType), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
 
         apiService.uploadFile(relId, body).enqueue(new Callback<>() {
