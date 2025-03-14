@@ -24,8 +24,8 @@ public class RestaurantCategoryRepository {
     private final FoodoraApiService apiService = ApiClient.getApiService();
     private final MutableLiveData<List<RestaurantCategory>> restaurantCategories = new MutableLiveData<>(new ArrayList<>());
 
-    private final MutableLiveData<Boolean> categoryCreated = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> categoryUpdated = new MutableLiveData<>();
+    private final MutableLiveData<RestaurantCategory> categoryCreated = new MutableLiveData<>();
+    private final MutableLiveData<RestaurantCategory> categoryUpdated = new MutableLiveData<>();
     private final MutableLiveData<Boolean> categoryDeleted = new MutableLiveData<>();
 
     public LiveData<List<RestaurantCategory>> getRestaurantCategories() {
@@ -55,7 +55,7 @@ public class RestaurantCategoryRepository {
         return restaurantCategories;
     }
 
-    public LiveData<Boolean> createRestaurantCategory(RestaurantCategory category) {
+    public LiveData<RestaurantCategory> createRestaurantCategory(RestaurantCategory category) {
         apiService.createRestaurantCategory(category).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RestaurantCategory> call, Response<RestaurantCategory> response) {
@@ -67,24 +67,24 @@ public class RestaurantCategoryRepository {
                         List<RestaurantCategory> updatedCategories = new ArrayList<>(currentCategories);
                         updatedCategories.add(created);
                         restaurantCategories.postValue(toSortedList(updatedCategories));
-                        categoryCreated.postValue(true);
+                        categoryCreated.postValue(created);
                     }
                 } else {
                     // TODO: Handle error
-                    categoryCreated.postValue(false);
+                    categoryCreated.postValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<RestaurantCategory> call, Throwable throwable) {
-                categoryCreated.postValue(false);
+                categoryCreated.postValue(null);
             }
         });
 
         return categoryCreated;
     }
 
-    public LiveData<Boolean> updateRestaurantCategory(RestaurantCategory category) {
+    public LiveData<RestaurantCategory> updateRestaurantCategory(RestaurantCategory category) {
         apiService.updateRestaurantCategory(category.id, category).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RestaurantCategory> call, Response<RestaurantCategory> response) {
@@ -111,15 +111,15 @@ public class RestaurantCategoryRepository {
 //                    }
 
                     // Erfolg zurückmelden
-                    categoryUpdated.postValue(true);
+                    categoryUpdated.postValue(updated);
                 } else {
-                    categoryUpdated.postValue(false);
+                    categoryUpdated.postValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<RestaurantCategory> call, Throwable throwable) {
-                categoryUpdated.postValue(false);
+                categoryUpdated.postValue(null);
             }
         });
 

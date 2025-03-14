@@ -25,11 +25,11 @@ public class RestaurantCategoryViewModel extends AndroidViewModel {
         return categoryRepository.getRestaurantCategories();
     }
 
-    public LiveData<Boolean> createRestaurantCategory(RestaurantCategory category) {
+    public LiveData<RestaurantCategory> createRestaurantCategory(RestaurantCategory category) {
         return categoryRepository.createRestaurantCategory(category);
     }
 
-    public LiveData<Boolean> updateRestaurantCategory(RestaurantCategory category) {
+    public LiveData<RestaurantCategory> updateRestaurantCategory(RestaurantCategory category) {
         return categoryRepository.updateRestaurantCategory(category);
     }
 

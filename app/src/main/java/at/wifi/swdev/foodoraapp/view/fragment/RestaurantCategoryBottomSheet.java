@@ -188,12 +188,12 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
         categoryViewModel.updateRestaurantCategory(categoryToUpdate).observe(requireActivity(), this::handleResult);
     }
 
-    private void handleResult(Boolean success) {
-        if (success) {
+    private void handleResult(@Nullable RestaurantCategory category) {
+        if (category != null) {
             // Gibt es eine Datei, die wir noch uploaded sollen?
             if (pickedFile != null) {
                 // Wir laden die Datei hoch
-                fileDataViewModel.uploadFile("XXXXXXX", pickedFile, mimeType).observe(requireActivity(), fileData -> {
+                fileDataViewModel.uploadFile(category.id, pickedFile, mimeType).observe(requireActivity(), fileData -> {
                     // TODO: We might want to patch this into the category
                     dismiss();
                 });
