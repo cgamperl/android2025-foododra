@@ -1,11 +1,8 @@
 package at.wifi.swdev.foodoraapp.view.fragment;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +17,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import at.wifi.swdev.foodoraapp.api.model.RestaurantCategory;
 import at.wifi.swdev.foodoraapp.databinding.BottomsheetRestaurantCategoryBinding;
+import at.wifi.swdev.foodoraapp.service.FileService;
 import at.wifi.swdev.foodoraapp.view.validation.Validator;
 import at.wifi.swdev.foodoraapp.view.viewmodel.FileDataViewModel;
 import at.wifi.swdev.foodoraapp.view.viewmodel.RestaurantCategoryViewModel;
@@ -44,62 +39,14 @@ public class RestaurantCategoryBottomSheet extends BottomSheetDialogFragment {
         @Override
         public void onActivityResult(Uri uri) {
             if (uri != null) {
-                // Originalen Dateinamen auslesen
-                String fileName = getFileName(requireContext(), uri);
-
-                // In unserer App eine temporäre Datei erzeugen
-                pickedFile = new File(requireContext().getCacheDir(), fileName);
-                mimeType = requireContext().getContentResolver().getType(uri);
-
-                try {
-                    pickedFile.createNewFile();
-
-                    // Wir wollen den Content der ausgewählten Datei lesen bzw. kopieren
-                    // -> try with resources
-                    try (InputStream inputStream = requireContext().getContentResolver().openInputStream(uri)) {
-                        FileOutputStream outputStream = new FileOutputStream(pickedFile);
-
-                        byte[] buffer = new byte[1024];
-                        int read;
-                        while ((read = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, read);
-                        }
-                    }
-
-                } catch (IOException e) {
-                    Log.e("", "Error creating temporary file");
-                    throw new RuntimeException(e);
-                }
+                Context context = requireContext();
+                String fileName = FileService.getFileName(context, uri);
+                pickedFile = new File(context.getCacheDir(), fileName);
+                mimeType = FileService.getMimeType(context, uri);
+                FileService.copyFileToAppCache(context, uri, pickedFile);
             }
         }
     });
-
-    private String getFileName(Context context, Uri uri) {
-        String fileName = null;
-
-        if ("content".equals(uri.getScheme())) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    if (index != -1) {
-                        fileName = cursor.getString(index);
-                    }
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-
-        // Fallback
-        if (fileName == null) {
-            fileName = uri.getLastPathSegment();
-        }
-
-        return fileName;
-    }
 
     public RestaurantCategoryBottomSheet() {
     }
