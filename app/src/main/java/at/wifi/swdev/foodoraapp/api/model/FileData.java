@@ -9,6 +9,6 @@ public class FileData {
     public String fileExtension;
     public String mimetype;
     public Long fileSize;
-    public LocalDateTime createdAt;
+    public String createdAt;
     public String relId;
 }
